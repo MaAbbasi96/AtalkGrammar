@@ -62,7 +62,7 @@ Integer: [0-9]+
 Character: '\''[a-zA-Z]'\''
         {System.out.println("Character = " + getText());};
 
-OPERATOR: ('+'|'-'|'*'|'/'|'=='|'='|'<<'|'('|')'|','|'['|']')
+OPERATOR: ('=='|'='|'<<'|'('|')'|','|'['|']')
         {System.out.println("OPERATOR = " + getText());};
 
 BOXSIZE: '<'[1-9][0-9]*'>'
