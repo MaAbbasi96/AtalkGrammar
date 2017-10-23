@@ -39,5 +39,9 @@ WRITE: [a-zA-Z]+ {getText().toLowerCase().equals("write")}?
 
 ID: [a-zA-Z]+ {System.out.println("ID = " + getText());};
 
+OPERATOR: '+'|'-'|'*'|'/'|'=='|'=' {System.out.println("OPERATOR = " + getText());};
+
+BOXSIZE: '<'[1-9][0-9]*'>' {System.out.println("BOXSIZE = " + getText());};
+
 
 WS  :   [ \t\r] -> skip ;
