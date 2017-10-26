@@ -129,56 +129,39 @@ break:
 COMMENT: '#' ~( '\r' | '\n' )* '\n'* {print("Comment = " + getText());};
 
 // Reserved Words
-ACTOR: [a-zA-Z]+
-        {getText().toLowerCase().equals("actor")}?
+ACTOR: 'actor'
         {print("ACTOR");};
-RECEIVER: [a-zA-Z]+
-        {getText().toLowerCase().equals("receiver")}?
+RECEIVER: 'receiver'
         {print("RECEIVER");};
-INT: [a-zA-Z]+
-        {getText().toLowerCase().equals("int")}?
+INT: 'int'
         {print("INT");};
-CHAR: [a-zA-Z]+
-        {getText().toLowerCase().equals("char")}?
+CHAR: 'char'
         {print("CHAR");};
-QUIT: [a-zA-Z]+
-        {getText().toLowerCase().equals("quit")}?
+QUIT: 'quit'
         {print("QUIT");};
-FOREACH: [a-zA-Z]+
-        {getText().toLowerCase().equals("foreach")}?
+FOREACH: 'foreach'
         {print("FOREACH");};
-BREAK: [a-zA-Z]+
-        {getText().toLowerCase().equals("break")}?
+BREAK: 'break'
         {print("BREAK");};
-IF: [a-zA-Z]+
-        {getText().toLowerCase().equals("if")}?
+IF: 'if'
         {print("IF");};
-ELSE: [a-zA-Z]+
-        {getText().toLowerCase().equals("else")}?
+ELSE: 'else'
         {print("ELSE");};
-ELSEIF: [a-zA-Z]+
-        {getText().toLowerCase().equals("elseif")}?
+ELSEIF: 'elseif'
         {print("ELSEIF");};
-SENDER: [a-zA-Z]+
-        {getText().toLowerCase().equals("sender")}?
+SENDER: 'sender'
         {print("SENDER");};
-SELF: [a-zA-Z]+
-        {getText().toLowerCase().equals("self")}?
+SELF: 'self'
         {print("SELF");};
-IN: [a-zA-Z]+
-        {getText().toLowerCase().equals("in")}?
+IN: 'in'
         {print("IN");};
-BEGIN: [a-zA-Z]+
-        {getText().toLowerCase().equals("begin")}?
+BEGIN: 'begin'
         {print("BEGIN");};
-END: [a-zA-Z]+
-        {getText().toLowerCase().equals("end")}?
+END: 'end'
         {print("END");};
-READ: [a-zA-Z]+
-        {getText().toLowerCase().equals("read")}?
+READ: 'read'
         {print("READ");};
-WRITE: [a-zA-Z]+
-        {getText().toLowerCase().equals("write")}?
+WRITE: 'write'
         {print("WRITE");};
 
 
@@ -191,7 +174,6 @@ CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
 STRING: '\"' ~('\"')* '\"'
         {print("String = " + getText());};
-
-
+        
 
 WS  :   [ \t\r] -> skip ;
