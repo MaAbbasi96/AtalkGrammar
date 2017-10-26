@@ -158,9 +158,11 @@ INTEGER: [1-9][0-9]*
         {print("Integer = " + getText());};
 CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
+STRING: '\"' ~('\"')* '\"'
 
 OPERATOR: ('=='|'=')
         {print("OPERATOR = " + getText());};
+
 
 
 
