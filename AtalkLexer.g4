@@ -5,14 +5,15 @@ lexer grammar AtalkLexer;
         System.out.println(str);
     }
 }
+
 program:
         (actor)*
         ;
 
 actor:
-        ACTOR ID '<' INTEGER '>'
+        ACTOR ID '<' INTEGER '>' '\n'+
         (body)*
-        END '\n'
+        END '\n'+
         ;
 
 body:
@@ -20,13 +21,13 @@ body:
         ;
 
 variableDefine:
-        (INT | CHAR) ('[' INTEGER ']')* ID ('=' (INTEGER | CHARACTER))?
+        (INT | CHAR) ('[' INTEGER ']')* ID ('=' (INTEGER | CHARACTER))? '\n'+
         ;
 
 receiver:
-        RECEIVER ID '(' (arguments)? ')\n'
+        RECEIVER ID '(' (arguments)? ')' '\n'+
         (statement)*
-        END '\n'
+        END '\n'+
         ;
 
 arguments:
@@ -42,11 +43,11 @@ statement:
         ;
 
 exprssion:
-        expOr '\n'
+        expOr '\n'+
         ;
 
 expOr:
-        expAnd | expAnd 'or' expOr 
+        expAnd | expAnd 'or' expOr
         ;
 
 expAnd:
@@ -58,7 +59,7 @@ expEquality:
         ;
 
 expComparator:
-        expAddSub | expAddSub ('<' | '>') expComparator 
+        expAddSub | expAddSub ('<' | '>') expComparator
         ;
 
 expAddSub:
@@ -76,56 +77,56 @@ expOther:
         INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
         ;
 actorCall:
-        (ID | SENDER | SELF) '<<' receiverCall
+        (ID | SENDER | SELF) '<<' receiverCall '\n'+
         ;
 
 receiverCall:
-        ID '(' (arguments)? ')'
+        ID '(' (arguments)? ')' '\n'+
         ;
 
 condition:
-        IF exprssion '\n'
+        IF exprssion '\n'+
         (statement)*
-        (ELSEIF expression '\n'
+        (ELSEIF expression '\n'+
         (statement)*)*
-        (ELSE '\n'
+        (ELSE '\n'+
         (statement)*)?
-        END '\n'
+        END '\n'+
         ;
 
 loop:
-        (FOREACH) ID IN ID '\n'
+        (FOREACH) ID IN ID '\n'+
         statement*
-        END '\n'
+        END '\n'+
         ;
 
 rwFunc:
         read | write
         ;
 read:
-        READ '(' INTEGER ')' '\n'
+        READ '(' INTEGER ')' '\n'+
         ;
 
 write:
-        WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'
+        WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'+
         ;
 
 scope:
-        BEGIN '\n'
+        BEGIN '\n'+
         statement*
-        END '\n'
+        END '\n'+
         ;
 
 quit:
-        QUIT'\n'
+        QUIT'\n'+
         ;
 
 break:
-        BREAK '\n'
+        BREAK '\n'+
         ;
 
 
-COMMENT: '#' ~( '\r' | '\n' )* {print("Comment = " + getText());};
+COMMENT: '#' ~( '\r' | '\n' )* '\n'* {print("Comment = " + getText());};
 
 // Reserved Words
 ACTOR: [a-zA-Z]+
@@ -189,7 +190,7 @@ INTEGER: [0-9]+
 CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
 STRING: '\"' ~('\"')* '\"'
-
+        {print("String = " + getText());};
 
 
 
