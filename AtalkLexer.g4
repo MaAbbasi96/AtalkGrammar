@@ -41,19 +41,39 @@ statement:
         expression | variableDefine | actorCall | condition | loop | rwFunc | quit
         ;
 
-expression:
+exprssion:
+        
         ;
 
 actorCall:
+        (ID | SENDER | SELF) '<<' receiverCall
+        ;
+
+receiverCall:
+        ID '(' (arguments)? ')'
         ;
 
 condition:
+        (IF | ELSE | ELSEIF) expression '\n'
+        statement*
+        END '\n'
         ;
 
 loop:
+        (FOREACH) ID 'in' ID '\n'
+        statement*
+        END '\n'
         ;
 
 rwFunc:
+        read | write
+        ;
+read:
+        READ '(' INTEGER ')' '\n'
+        ;
+
+write:
+        WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'
         ;
 
 quit: QUIT'\n'
