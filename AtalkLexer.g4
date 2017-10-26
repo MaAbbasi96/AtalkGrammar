@@ -38,11 +38,11 @@ argument:
         ;
 
 statement:
-        expression | variableDefine | actorCall | condition | loop | rwFunc | quit
+        expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break | scope
         ;
 
 exprssion:
-        
+
         ;
 
 actorCall:
@@ -54,13 +54,17 @@ receiverCall:
         ;
 
 condition:
-        (IF | ELSE | ELSEIF) expression '\n'
-        statement*
+        IF exprssion '\n'
+        (statement)*
+        (ELSEIF expression '\n'
+        (statement)*)*
+        (ELSE '\n'
+        (statement)*)?
         END '\n'
         ;
 
 loop:
-        (FOREACH) ID 'in' ID '\n'
+        (FOREACH) ID IN ID '\n'
         statement*
         END '\n'
         ;
@@ -76,7 +80,18 @@ write:
         WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'
         ;
 
-quit: QUIT'\n'
+scope:
+        BEGIN '\n'
+        statement*
+        END '\n'
+        ;
+
+quit:
+        QUIT'\n'
+        ;
+
+break:
+        BREAK '\n'
         ;
 
 
@@ -136,7 +151,7 @@ WRITE: [a-zA-Z]+
         {print("WRITE");};
 
 
-ID: [a-zA-Z]+
+ID: [a-zA-Z_][a-zA-Z0-9_]*
         {print("ID = " + getText());};
 
 INTEGER: [1-9][0-9]*
