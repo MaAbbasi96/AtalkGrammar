@@ -20,7 +20,7 @@ body:
         ;
 
 variableDefine:
-        (INT | CHAR) ID ('=' (INTEGER | CHARACTER))? // TODO: array declaration
+        (INT | CHAR) ('[' INTEGER ']')* ID ('=' (INTEGER | CHARACTER))?
         ;
 
 receiver:
@@ -34,7 +34,7 @@ arguments:
         ;
 
 argument:
-        (INT | CHAR) ID
+        (INT | CHAR) ('[' INTEGER ']')* ID
         ;
 
 statement:
@@ -159,9 +159,6 @@ INTEGER: [1-9][0-9]*
 CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
 STRING: '\"' ~('\"')* '\"'
-
-OPERATOR: ('=='|'=')
-        {print("OPERATOR = " + getText());};
 
 
 
