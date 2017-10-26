@@ -42,9 +42,39 @@ statement:
         ;
 
 exprssion:
-
+        expOr '\n'
         ;
 
+expOr:
+        expAnd | expAnd 'or' expOr 
+        ;
+
+expAnd:
+        expEquality | expEquality 'and' expAnd
+        ;
+
+expEquality:
+        expComparator | expComparator ('==' | '<>') expEquality
+        ;
+
+expComparator:
+        expAddSub | expAddSub ('<' | '>') expComparator 
+        ;
+
+expAddSub:
+        expDividMult | expDividMult ('+' | '-') expAddSub
+        ;
+expDividMult:
+        expNot | expNot ('/' | '*') expDividMult
+        ;
+
+expNot:
+        expOther | exoOther('not' | '-') expNot
+        ;
+
+expOther:
+        INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
+        ;
 actorCall:
         (ID | SENDER | SELF) '<<' receiverCall
         ;
@@ -154,7 +184,7 @@ WRITE: [a-zA-Z]+
 ID: [a-zA-Z_][a-zA-Z0-9_]*
         {print("ID = " + getText());};
 
-INTEGER: [1-9][0-9]*
+INTEGER: [0-9]+
         {print("Integer = " + getText());};
 CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
