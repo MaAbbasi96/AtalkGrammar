@@ -1,8 +1,9 @@
-actor Adder<10>
+actor Adder<00>
 #Variables
-int addsCount
-receiver add(int x, int y)
-sender<< addComplete(x + y)
-x = 10 + 5
-char z = 's'
+    x = 10 + 5
+    char z = 's'
+    int addsCount
+    receiver add(int x, int y)
+        sender<< addComplete(x + y)
+    end
 end

@@ -1,72 +1,132 @@
 lexer grammar AtalkLexer;
-Comment: '#' ~( '\r' | '\n' )* {System.out.println("Comment = " + getText());};
+
+@members{
+    void print(String str){
+        System.out.println(str);
+    }
+}
+program:
+        (actor)*
+        ;
+
+actor:
+        ACTOR ID '<' INTEGER '>'
+        (body)*
+        END '\n'
+        ;
+
+body:
+        (variableDefine)* | (receiver)*
+        ;
+
+variableDefine:
+        (INT | CHAR) ID ('=' (INTEGER | CHARACTER))? // TODO: array declaration
+        ;
+
+receiver:
+        RECEIVER ID '(' (arguments)? ')\n'
+        (statement)*
+        END '\n'
+        ;
+
+arguments:
+        argument (',' argument)*
+        ;
+
+argument:
+        (INT | CHAR) ID
+        ;
+
+statement:
+        expression | variableDefine | actorCall | condition | loop | rwFunc | quit
+        ;
+
+expression:
+        ;
+
+actorCall:
+        ;
+
+condition:
+        ;
+
+loop:
+        ;
+
+rwFunc:
+        ;
+
+quit: QUIT'\n'
+        ;
+
+
+COMMENT: '#' ~( '\r' | '\n' )* {print("Comment = " + getText());};
+
 // Reserved Words
 ACTOR: [a-zA-Z]+
         {getText().toLowerCase().equals("actor")}?
-        {System.out.println("ACTOR");};
+        {print("ACTOR");};
 RECEIVER: [a-zA-Z]+
         {getText().toLowerCase().equals("receiver")}?
-        {System.out.println("RECEIVER");};
+        {print("RECEIVER");};
 INT: [a-zA-Z]+
         {getText().toLowerCase().equals("int")}?
-        {System.out.println("INT");};
+        {print("INT");};
 CHAR: [a-zA-Z]+
         {getText().toLowerCase().equals("char")}?
-        {System.out.println("CHAR");};
+        {print("CHAR");};
 QUIT: [a-zA-Z]+
         {getText().toLowerCase().equals("quit")}?
-        {System.out.println("QUIT");};
+        {print("QUIT");};
 FOREACH: [a-zA-Z]+
         {getText().toLowerCase().equals("foreach")}?
-        {System.out.println("FOREACH");};
+        {print("FOREACH");};
 BREAK: [a-zA-Z]+
         {getText().toLowerCase().equals("break")}?
-        {System.out.println("BREAK");};
+        {print("BREAK");};
 IF: [a-zA-Z]+
         {getText().toLowerCase().equals("if")}?
-        {System.out.println("IF");};
+        {print("IF");};
 ELSE: [a-zA-Z]+
         {getText().toLowerCase().equals("else")}?
-        {System.out.println("ELSE");};
+        {print("ELSE");};
 ELSEIF: [a-zA-Z]+
         {getText().toLowerCase().equals("elseif")}?
-        {System.out.println("ELSEIF");};
+        {print("ELSEIF");};
 SENDER: [a-zA-Z]+
         {getText().toLowerCase().equals("sender")}?
-        {System.out.println("SENDER");};
+        {print("SENDER");};
 SELF: [a-zA-Z]+
         {getText().toLowerCase().equals("self")}?
-        {System.out.println("SELF");};
+        {print("SELF");};
 IN: [a-zA-Z]+
         {getText().toLowerCase().equals("in")}?
-        {System.out.println("IN");};
+        {print("IN");};
 BEGIN: [a-zA-Z]+
         {getText().toLowerCase().equals("begin")}?
-        {System.out.println("BEGIN");};
+        {print("BEGIN");};
 END: [a-zA-Z]+
         {getText().toLowerCase().equals("end")}?
-        {System.out.println("END");};
+        {print("END");};
 READ: [a-zA-Z]+
         {getText().toLowerCase().equals("read")}?
-        {System.out.println("READ");};
+        {print("READ");};
 WRITE: [a-zA-Z]+
         {getText().toLowerCase().equals("write")}?
-        {System.out.println("WRITE");};
+        {print("WRITE");};
 
 
 ID: [a-zA-Z]+
-        {System.out.println("ID = " + getText());};
+        {print("ID = " + getText());};
 
-Integer: [0-9]+
-        {System.out.println("Integer = " + getText());};
-Character: '\''[a-zA-Z]'\''
-        {System.out.println("Character = " + getText());};
+INTEGER: [1-9][0-9]*
+        {print("Integer = " + getText());};
+CHARACTER: '\''[a-zA-Z]'\''
+        {print("Character = " + getText());};
 
 OPERATOR: ('=='|'=')
-        {System.out.println("OPERATOR = " + getText());};
+        {print("OPERATOR = " + getText());};
 
-BOXSIZE: '<'[1-9][0-9]*'>'
-        {System.out.println("BOXSIZE = " + getText());};
 
 
 WS  :   [ \t\r] -> skip ;
