@@ -24,10 +24,16 @@ body:
         ;
 
 variableDefine:
-        (INT | CHAR) ('[' INTEGER ']')* name=ID ('=' (INTEGER | CHARACTER))? '\n'+
+        (INT | CHAR) ('[' INTEGER ']')* name=ID ('=' (INTEGER | CHARACTER | arrayy ))? '\n'+
         {print("variableDefine: " + $name.text);}
         ;
+arrayy:
+        '{' array (',' (array) )* '}'
+        ;
 
+array:
+        (INTEGER | CHARACTER) 
+        ;
 receiver:
         RECEIVER name=ID '(' (arguments)? ')' '\n'+
         (statement)*
