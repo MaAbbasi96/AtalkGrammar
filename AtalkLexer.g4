@@ -29,10 +29,11 @@ variableDefine:
         ;
 arrayy:
         '{' array (',' (array) )* '}'
+        {print("array");}
         ;
 
 array:
-        (INTEGER | CHARACTER) 
+        (INTEGER | CHARACTER)
         ;
 receiver:
         RECEIVER name=ID '(' (arguments)? ')' '\n'+
