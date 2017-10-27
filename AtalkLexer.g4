@@ -28,12 +28,13 @@ variableDefine:
         {print("variableDefine: " + $name.text);}
         ;
 array:
-        '{' arrayy (',' (array) )* '}'
+        '{' arrayy (',' (array) )* '}' | arrayy
         ;
 
 arrayy:
-        ('{' INTEGER (',' INTEGER)*'}') | ('{' CHARACTER (',' CHARACTER)*'}') | STRING  
+        ('{' INTEGER (',' INTEGER)*'}') | ('{' CHARACTER (',' CHARACTER)*'}') | STRING
         ;
+
 receiver:
         RECEIVER name=ID '(' (arguments)? ')' '\n'+
         (statement)*
