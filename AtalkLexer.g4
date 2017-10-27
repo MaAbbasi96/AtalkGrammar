@@ -8,84 +8,104 @@ grammar AtalkLexer;
 
 program:
         (actor)*
+        {print("program");}
         ;
 
 actor:
-        ACTOR ID '<' INTEGER '>' '\n'+
+        ACTOR name=ID '<' INTEGER '>' '\n'+
         (body)*
         END '\n'+
+        {print("actor: " + $name.text);}
         ;
 
 body:
         ((variableDefine) | (receiver) | '\n')+
+        {print("body");}
         ;
 
 variableDefine:
-        (INT | CHAR) ('[' INTEGER ']')* ID ('=' (INTEGER | CHARACTER))? '\n'+
+        (INT | CHAR) ('[' INTEGER ']')* name=ID ('=' (INTEGER | CHARACTER))? '\n'+
+        {print("variableDefine: " + $name.text);}
         ;
 
 receiver:
-        RECEIVER ID '(' (arguments)? ')' '\n'+
+        RECEIVER name=ID '(' (arguments)? ')' '\n'+
         (statement)*
         END '\n'+
+        {print("receiver: " + $name.text);}
         ;
 
 arguments:
         (argument | expression) (',' (argument | expression))*
+        {print("arguments");}
         ;
 
 argument:
         (INT | CHAR)? ('[' INTEGER ']')* ID
+        {print("argument");}
         ;
 
 statement:
         expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break_ | scope
+        {print("statement");}
         ;
 
 expression:
         (expOr | expAlloc) '\n'*
+        {print("expression");}
         ;
 
 expAlloc:
-        ID '=' expression
+        ID name='=' expression
+        {print("expAlloc: " + $name.text);}
         ;
 
 expOr:
-        expAnd | expAnd 'or' expOr
+        expAnd | expAnd name='or' expOr
+        {print("expOr: " + $name.text);}
         ;
 
 expAnd:
-        expEquality | expEquality 'and' expAnd
+        expEquality | expEquality name='and' expAnd
+        {print("expAnd: " + $name.text);}
         ;
 
 expEquality:
-        expComparator | expComparator ('==' | '<>') expEquality
+        expComparator | expComparator name=('==' | '<>') expEquality
+        {print("expEquality: " + $name.text);}
         ;
 
 expComparator:
-        expAddSub | expAddSub ('<' | '>') expComparator
+        expAddSub | expAddSub name=('<' | '>') expComparator
+        {print("expComparator: " + $name.text);}
         ;
 
 expAddSub:
-        expDividMult | expDividMult ('+' | '-') expAddSub
+        expDividMult | expDividMult name=('+' | '-') expAddSub
+        {print("expAddSub: " + $name.text);}
         ;
 expDividMult:
-        expNot | expNot ('/' | '*') expDividMult
+        expNot | expNot name=('/' | '*') expDividMult
+        {print("expDividMult: " + $name.text);}
         ;
 
 expNot:
-        expOther | expOther('not' | '-') expNot
+        expOther | expOther name=('not' | '-') expNot
+        {print("expNot: " + $name.text);}
         ;
 
 expOther:
         INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
+        {print("expOther");}
         ;
 actorCall:
         (ID | SENDER | SELF) '<<' receiverCall
+        {print("actorCall");}
         ;
 
 receiverCall:
         ID '(' (arguments)? ')' '\n'+
+        {print("receiverCall");}
         ;
 
 condition:
@@ -96,88 +116,73 @@ condition:
         (ELSE '\n'+
         (statement)*)?
         END '\n'+
+        {print("condition");}
         ;
 
 loop:
         (FOREACH) ID IN ID '\n'+
         statement*
         END '\n'+
+        {print("loop");}
         ;
 
 rwFunc:
         read | write
+        {print("rwFunc");}
         ;
 read:
         READ '(' INTEGER ')' '\n'+
+        {print("read");}
         ;
 
 write:
         WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'+
+        {print("write");}
         ;
 
 scope:
         BEGIN '\n'+
         statement*
         END '\n'+
+        {print("scope");}
         ;
 
 quit:
         QUIT'\n'+
+        {print("quit");}
         ;
 
 break_:
         BREAK '\n'+
+        {print("break_");}
         ;
 
 
 COMMENT: '#' ~( '\r' | '\n' )* '\n'* -> skip;
 
 // Reserved Words
-ACTOR: 'actor'
-        {print("ACTOR");};
-RECEIVER: 'receiver'
-        {print("RECEIVER");};
-INT: 'int'
-        {print("INT");};
-CHAR: 'char'
-        {print("CHAR");};
-QUIT: 'quit'
-        {print("QUIT");};
-FOREACH: 'foreach'
-        {print("FOREACH");};
-BREAK: 'break_'
-        {print("BREAK");};
-IF: 'if'
-        {print("IF");};
-ELSE: 'else'
-        {print("ELSE");};
-ELSEIF: 'elseif'
-        {print("ELSEIF");};
-SENDER: 'sender'
-        {print("SENDER");};
-SELF: 'self'
-        {print("SELF");};
-IN: 'in'
-        {print("IN");};
-BEGIN: 'begin'
-        {print("BEGIN");};
-END: 'end'
-        {print("END");};
-READ: 'read'
-        {print("READ");};
-WRITE: 'write'
-        {print("WRITE");};
+ACTOR: 'actor';
+RECEIVER: 'receiver';
+INT: 'int';
+CHAR: 'char';
+QUIT: 'quit';
+FOREACH: 'foreach';
+BREAK: 'break_';
+IF: 'if';
+ELSE: 'else';
+ELSEIF: 'elseif';
+SENDER: 'sender';
+SELF: 'self';
+IN: 'in';
+BEGIN: 'begin';
+END: 'end';
+READ: 'read';
+WRITE: 'write';
 
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
-ID: [a-zA-Z_][a-zA-Z0-9_]*
-        {print("ID = " + getText());};
-
-INTEGER: [0-9]+
-        {print("Integer = " + getText());};
-CHARACTER: '\''[a-zA-Z]'\''
-        {print("Character = " + getText());};
-STRING: '"' ~('"')* '"'
-        {print("String = " + getText());};
-
+INTEGER: [0-9]+;
+CHARACTER: '\''[a-zA-Z]'\'';
+STRING: '"' ~('"')* '"';
 
 WS  :   [ \t\r] -> skip ;
