@@ -1,4 +1,4 @@
-lexer grammar AtalkLexer;
+grammar AtalkLexer;
 
 @members{
     void print(String str){
@@ -17,7 +17,7 @@ actor:
         ;
 
 body:
-        (variableDefine)* | (receiver)*
+        ((variableDefine) | (receiver) | '\n')+
         ;
 
 variableDefine:
@@ -31,19 +31,23 @@ receiver:
         ;
 
 arguments:
-        argument (',' argument)*
+        (argument | expression) (',' (argument | expression))*
         ;
 
 argument:
-        (INT | CHAR) ('[' INTEGER ']')* ID
+        (INT | CHAR)? ('[' INTEGER ']')* ID
         ;
 
 statement:
-        expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break | scope
+        expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break_ | scope
         ;
 
-exprssion:
-        expOr '\n'+
+expression:
+        (expOr | expAlloc) '\n'*
+        ;
+
+expAlloc:
+        ID '=' expression
         ;
 
 expOr:
@@ -70,14 +74,14 @@ expDividMult:
         ;
 
 expNot:
-        expOther | exoOther('not' | '-') expNot
+        expOther | expOther('not' | '-') expNot
         ;
 
 expOther:
         INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
         ;
 actorCall:
-        (ID | SENDER | SELF) '<<' receiverCall '\n'+
+        (ID | SENDER | SELF) '<<' receiverCall
         ;
 
 receiverCall:
@@ -85,7 +89,7 @@ receiverCall:
         ;
 
 condition:
-        IF exprssion '\n'+
+        IF expression '\n'+
         (statement)*
         (ELSEIF expression '\n'+
         (statement)*)*
@@ -121,12 +125,12 @@ quit:
         QUIT'\n'+
         ;
 
-break:
+break_:
         BREAK '\n'+
         ;
 
 
-COMMENT: '#' ~( '\r' | '\n' )* '\n'* {print("Comment = " + getText());};
+COMMENT: '#' ~( '\r' | '\n' )* '\n'* -> skip;
 
 // Reserved Words
 ACTOR: 'actor'
@@ -141,7 +145,7 @@ QUIT: 'quit'
         {print("QUIT");};
 FOREACH: 'foreach'
         {print("FOREACH");};
-BREAK: 'break'
+BREAK: 'break_'
         {print("BREAK");};
 IF: 'if'
         {print("IF");};
@@ -172,8 +176,8 @@ INTEGER: [0-9]+
         {print("Integer = " + getText());};
 CHARACTER: '\''[a-zA-Z]'\''
         {print("Character = " + getText());};
-STRING: '\"' ~('\"')* '\"'
+STRING: '"' ~('"')* '"'
         {print("String = " + getText());};
-        
+
 
 WS  :   [ \t\r] -> skip ;
