@@ -7,27 +7,26 @@ grammar AtalkLexer;
 }
 
 program:
-        (actor)*
         {print("program");}
+        (actor)*
         ;
 
 actor:
-        ACTOR name=ID '<' INTEGER '>' '\n'+
+        ACTOR name=ID {print("actor: " + $name.text);} '<' INTEGER '>' '\n'+
         (body)*
         END '\n'+
-        {print("actor: " + $name.text);}
         ;
 
 body:
-        ((variableDefine) | (receiver) | '\n')+
         {print("body");}
+        ((variableDefine) | (receiver) | '\n')+
         ;
 
 variableDefine:
-        (INT | CHAR) ('[' INTEGER ']')* name=ID ('=' (INTEGER | CHARACTER | array ))? '\n'+
-        {print("variableDefine: " + $name.text);}
+        (INT | CHAR) ('[' INTEGER ']')* name=ID {print("variableDefine: " + $name.text);} ('=' (INTEGER | CHARACTER | array ))? '\n'+
         ;
 array:
+        {print("array");}
         '{' arrayy (',' (array) )* '}' | arrayy
         ;
 
@@ -36,86 +35,78 @@ arrayy:
         ;
 
 receiver:
-        RECEIVER name=ID '(' (arguments)? ')' '\n'+
+        RECEIVER name=ID {print("receiver: " + $name.text);} '(' (arguments)? ')' '\n'+
         (statement)*
         END '\n'+
-        {print("receiver: " + $name.text);}
         ;
 
 arguments:
-        (argument | expression) (',' (argument | expression))*
         {print("arguments");}
+        (argument | expression) (',' (argument | expression))*
         ;
 
 argument:
-        (INT | CHAR)? ('[' INTEGER ']')* ID
         {print("argument");}
+        (INT | CHAR)? ('[' INTEGER ']')* ID
         ;
 
 statement:
-        expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break_ | scope
         {print("statement");}
+        expression | variableDefine | actorCall | condition | loop | rwFunc | quit | break_ | scope
         ;
 
 expression:
-        (expOr | expAlloc) '\n'*
         {print("expression");}
+        (expOr | expAlloc) '\n'*
         ;
 
 expAlloc:
-        ID name='=' expression
-        {print("expAlloc: " + $name.text);}
+        ID name='=' {print("expAlloc: " + $name.text);} expression
         ;
 
 expOr:
-        expAnd | expAnd name='or' expOr
-        {print("expOr: " + $name.text);}
+        expAnd | expAnd name='or' {print("expOr: " + $name.text);} expOr
         ;
 
 expAnd:
-        expEquality | expEquality name='and' expAnd
-        {print("expAnd: " + $name.text);}
+        expEquality | expEquality name='and' {print("expAnd: " + $name.text);} expAnd
         ;
 
 expEquality:
-        expComparator | expComparator name=('==' | '<>') expEquality
-        {print("expEquality: " + $name.text);}
+        expComparator | expComparator name=('==' | '<>') {print("expEquality: " + $name.text);} expEquality
         ;
 
 expComparator:
-        expAddSub | expAddSub name=('<' | '>') expComparator
-        {print("expComparator: " + $name.text);}
+        expAddSub | expAddSub name=('<' | '>') {print("expComparator: " + $name.text);} expComparator
         ;
 
 expAddSub:
-        expDividMult | expDividMult name=('+' | '-') expAddSub
-        {print("expAddSub: " + $name.text);}
+        expDividMult | expDividMult name=('+' | '-') {print("expAddSub: " + $name.text);} expAddSub
         ;
 expDividMult:
-        expNot | expNot name=('/' | '*') expDividMult
-        {print("expDividMult: " + $name.text);}
+        expNot | expNot name=('/' | '*') {print("expDividMult: " + $name.text);} expDividMult
         ;
 
 expNot:
-        expOther | expOther name=('not' | '-') expNot
-        {print("expNot: " + $name.text);}
+        expOther | expOther name=('not' | '-') {print("expNot: " + $name.text);} expNot
         ;
 
 expOther:
-        INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
         {print("expOther");}
+        INTEGER | ID (('[' expression ']')*)  | '(' expression ')' |  read
         ;
 actorCall:
-        (ID | SENDER | SELF) '<<' receiverCall
         {print("actorCall");}
+        (ID | SENDER | SELF) '<<' receiverCall
         ;
 
 receiverCall:
-        ID '(' (arguments)? ')' '\n'+
         {print("receiverCall");}
+        ID '(' (arguments)? ')' '\n'+
         ;
 
 condition:
+        {print("condition");}
         IF expression '\n'+
         (statement)*
         (ELSEIF expression '\n'+
@@ -123,45 +114,45 @@ condition:
         (ELSE '\n'+
         (statement)*)?
         END '\n'+
-        {print("condition");}
         ;
 
 loop:
+        {print("loop");}
         (FOREACH) ID IN ID '\n'+
         statement*
         END '\n'+
-        {print("loop");}
         ;
 
 rwFunc:
-        read | write
         {print("rwFunc");}
+        read | write
         ;
 read:
-        READ '(' INTEGER ')' '\n'+
         {print("read");}
+        READ '(' INTEGER ')' '\n'+
         ;
 
 write:
-        WRITE '(' (STRING | INTEGER | CHAR | ID) ')' '\n'+
         {print("write");}
+        WRITE '(' (STRING | INTEGER | CHAR | ID | expression) ')' '\n'+
         ;
 
 scope:
+        {print("scope");}
         BEGIN '\n'+
         statement*
         END '\n'+
-        {print("scope");}
+                {print("scope");}
         ;
 
 quit:
-        QUIT'\n'+
         {print("quit");}
+        QUIT'\n'+
         ;
 
 break_:
-        BREAK '\n'+
         {print("break_");}
+        BREAK '\n'+
         ;
 
 
